@@ -1,6 +1,18 @@
+import React from 'react';
+import { Provider } from 'react-redux';
+
 import {AppRegistry} from 'react-native';
-// import Feed from './src/screens/Feed';
 import Tab from './src/Navigator';
 import {name as appName} from './app.json';
 
-AppRegistry.registerComponent(appName, () => Tab);
+import storeConfig from './src/store';
+
+const store = storeConfig();
+
+const Redux = () => (
+    <Provider store={store}>
+        <Tab />
+    </Provider>
+);
+
+AppRegistry.registerComponent(appName, () => Redux);

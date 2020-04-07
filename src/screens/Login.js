@@ -1,20 +1,29 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
-export default class Login extends Component {
+import { login } from '../store/actions/user';
+// import userReducer from '../store/reducers/user';
+
+class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
             email: '',
-            password: ''
+            password: '',
+            nome: 'temporario'
         };
     }
 
     login = () => {
+        this.props.onlogin({ ...this.state });
+
         this.props.navigation.navigate('Profile');
     }
 
     render() {
+        console.log(this.props);
+
         return (
         <View style={styles.container}>
             <TextInput placeholder="Email" style={styles.input} 
@@ -22,7 +31,7 @@ export default class Login extends Component {
                 value={this.state.email}
                 onChangeText={email => this.setState({email})}
             />
-            <TextInput placeholder="Email" style={styles.input} 
+            <TextInput placeholder="Senha" style={styles.input} 
                 autoFocus={true} secureTextEntry 
                 value={this.state.password}
                 onChangeText={password => this.setState({password})}
@@ -62,3 +71,9 @@ const styles = StyleSheet.create({
         borderColor: '#333'
     }
 });
+
+
+
+export default connect(null, {
+    onlogin: login
+})(Login);

@@ -1,27 +1,26 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Gravatar } from 'react-native-gravatar';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
-export default class Profile extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-        };
-    }
+import { logout } from '../store/actions/user';
+
+class Profile extends Component {
 
     logout =() => {
+        this.props.logout();
+
         this.props.navigation.navigate('Auth');
     } 
 
   render() {
 
-    const options = { email: 'jorgegru@gmail.com', secure: true}
+    const options = { email: this.props.email, secure: true}
     return (
       <View style={ styles.container }>
           <Gravatar options={options} style={styles.avatar} />
-          <Text style={styles.nickname}>Fulano de tal</Text>
-          <Text style={styles.email}>jorgegru@gmail.com</Text>
+          <Text style={styles.nickname}>{this.props.nome}</Text>
+          <Text style={styles.email}>{this.props.email}</Text>
           <TouchableOpacity onPress={this.logout} style={styles.button} >
             <Text style={styles.buttomText}>Sair</Text>
           </TouchableOpacity>
@@ -60,3 +59,13 @@ const styles = StyleSheet.create({
         color: '#FFF'
     }
 });
+
+const mapStateToProps = state => {
+    return {
+        nome: state.user.nome,
+        email: state.user.email
+    }
+}
+
+
+export default connect(mapStateToProps, { logout })(Profile);

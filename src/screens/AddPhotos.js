@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { addPost } from '../store/actions/posts'
+
 import { 
     View, 
     Text, 
@@ -13,7 +16,7 @@ import {
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 
-export default class AddPhotos extends Component {
+class AddPhotos extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -38,22 +41,29 @@ export default class AddPhotos extends Component {
                 console.log('User tapped custom button: ', response.customButton);
               } else {
                 const source = { uri: response.uri };
-            
-                // You can also display the image using data:
-                // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-                
-                
+        
                 this.setState({
                     image: source,
                 });
-                console.log(this.state.image);
                   
               }
         })
     }
 
     save = async () => {
-        Alert.alert('Imagem Adicionada!', this.state.comment );
+        this.props.onAddPost({
+            id: Math.random(),
+            nickname: this.props.nome,
+            email: this.props.email,
+            image: this.state.image,
+            comments: [{
+                nickname: this.props.name,
+                comment: this.state.comment
+            }]
+        });
+
+        this.setState({ image: null, comment: ''});
+        this.props.navigation.navigate('Feed');
     }
 
     render() {
@@ -117,3 +127,13 @@ const styles = StyleSheet.create({
         width: '90%'
     }
 });
+
+
+const mapStateToProps = state => {
+    return {
+        email: state.user.email,
+        nome: state.user.nome,
+    }
+}
+
+export default connect(mapStateToProps, { onAddPost: addPost })(AddPhotos);
