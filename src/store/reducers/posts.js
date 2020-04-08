@@ -1,37 +1,15 @@
-import { ADD_POST, ADD_COMMENT } from '../actions/types';
+import { SET_POSTS, ADD_COMMENT, CREATING_POST, POST_CREATED } from '../actions/types';
 
 const initialState = {
-    posts: [{
-        id: Math.random(),
-        nickname: 'Jorgge Grumaria Jesus',
-        email: 'elisa@teste.com.br',
-        image: require('../../../assets/imgs/fence.jpg'),
-        comments: [
-            {
-                nickname: 'John Ray sheen',
-                comment: 'Stunnis vamos!'
-            },
-            {
-                nickname: 'Julia kisandra',
-                comment: 'Não gostei!'
-            },
-        ]
-    },{
-        id: Math.random(),
-        nickname: 'Fransisco De oliveira',
-        email: 'fransisco@teste.com.br',
-        image: require('../../../assets/imgs/bw.jpg'),
-        comments: []
-    }]
+    posts: [],
+    isUploading: false
 }
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case ADD_POST:
+        case SET_POSTS:
             return { ...state,
-                posts: state.posts.concat({
-                    ...action.payload
-                })
+                posts: action.payload
             };
         case ADD_COMMENT:
             return {
@@ -49,7 +27,14 @@ export default (state = initialState, action) => {
                     return post;
                 })
             }
-
+        case CREATING_POST:
+            return { ...state,
+                isUploading: true
+            };
+        case POST_CREATED:
+            return { ...state,
+                isUploading: false
+            };
         default:
             return state
     }

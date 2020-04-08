@@ -25,6 +25,16 @@ class AddPhotos extends Component {
         };
     }
 
+    componentDidUpdate = prevProps => {
+        if (prevProps.loading && !this.props.loading) {
+            this.setState({
+                image: null,
+                comment: ''
+            })
+            this.props.navigation.navigate('Feed');
+        }
+    }
+
     pickImage = () => {
         ImagePicker.showImagePicker({
             title: 'Escolha a imagem',
@@ -62,8 +72,8 @@ class AddPhotos extends Component {
             }]
         });
 
-        this.setState({ image: null, comment: ''});
-        this.props.navigation.navigate('Feed');
+        // this.setState({ image: null, comment: ''});
+        // this.props.navigation.navigate('Feed');
     }
 
     render() {
@@ -82,7 +92,10 @@ class AddPhotos extends Component {
                         style={styles.input}
                         value={this.state.comment}
                         onChangeText={comment => this.setState({ comment })} />
-                    <TouchableOpacity onPress={this.save}  style={styles.buttom} >
+                    <TouchableOpacity
+                        disabled={this.props.loading}
+                        onPress={this.save}  
+                        style={[styles.buttom, this.props.loading ? styles.buttomDisabled:null]} >
                         <Text  style={styles.buttomText}>Salvar</Text>
                     </TouchableOpacity>
 
@@ -125,6 +138,9 @@ const styles = StyleSheet.create({
     input: {
         marginTop: 20,
         width: '90%'
+    },
+    buttomDisabled: {
+        backgroundColor: '#AAA'
     }
 });
 
@@ -133,6 +149,7 @@ const mapStateToProps = state => {
     return {
         email: state.user.email,
         nome: state.user.nome,
+        loading: state.posts.isUploading,
     }
 }
 

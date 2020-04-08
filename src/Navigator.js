@@ -7,18 +7,20 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Feed from './screens/Feed';
 import AddPhotos from './screens/AddPhotos';
 import Profile from './screens/Profile';
-import Login from './screens/Login'
-import Register from './screens/Register'
+import Login from './screens/Login';
+import Register from './screens/Register';
+import Splash from './screens/Splash';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 function loginOrProfileStack() {
   return (
-    <Stack.Navigator initialRouteName="Auth">
+    <Stack.Navigator initialRouteName="Splash">
       <Stack.Screen name="Profile" component={Profile}  />
       <Stack.Screen name="Auth" component={Login} />
       <Stack.Screen name="Register" component={Register} />
+      <Stack.Screen name="Splash" component={Splash} />
     </Stack.Navigator>
   );
 }
